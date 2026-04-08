@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kho TikTok Shop - Quét đơn</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+      :root { font-family: Arial, sans-serif; }
+      body { margin: 0; background: #f3f4f6; }
+      .container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+      .card { background: white; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+      .row { display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; }
+      .col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-12 { grid-column: span 12; }
+      input, select, button { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+      button { cursor: pointer; background: #111827; color: #fff; }
+      .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+      .stat { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; }
+      .ok { color: #047857; font-weight: 700; }
+      .warn { color: #b45309; font-weight: 700; }
+      .bad { color: #b91c1c; font-weight: 700; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border-bottom: 1px solid #e5e7eb; padding: 8px; text-align: left; font-size: 14px; }
+      .small { font-size: 13px; color: #6b7280; }
+      @media (max-width: 900px) { .col-3,.col-4,.col-6 { grid-column: span 12; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h2>Quét đơn hàng TikTok Shop</h2>
+        <div class="row">
+          <div class="col-6">
+            <input id="orderInput" placeholder="Quét barcode hoặc nhập mã đơn rồi Enter" autofocus />
+          </div>
+          <div class="col-3"><button id="scanBtn">Kiểm tra đơn</button></div>
+          <div class="col-3"><div id="lastResult" class="small">Chưa có đơn nào được quét.</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dashboard</h3>
+        <div id="stats" class="stats"></div>
+        <canvas id="dashboardChart" height="90"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Thiếu đơn cần lấy (đã quét nhưng chưa được lấy)</h3>
+        <div id="missingSummary" class="small"></div>
+        <div style="max-height: 220px; overflow: auto;">
+          <table>
+            <thead><tr><th>Order ID</th><th>Thời gian quét</th><th>Trạng thái TikTok</th></tr></thead>
+            <tbody id="missingTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Lịch sử quét</h3>
+        <div class="row">
+          <div class="col-4"><input id="searchInput" placeholder="Tìm theo mã đơn" /></div>
+          <div class="col-4"><input id="dateInput" type="date" /></div>
+          <div class="col-4">
+            <select id="statusInput">
+              <option value="">Tất cả trạng thái</option>
+              <option>CHƯA ĐƯỢC LẤY</option>
+              <option>ĐÃ ĐƯỢC LẤY</option>
+              <option>ĐÃ GIAO</option>
+              <option>ĐƠN HỦY</option>
+            </select>
+          </div>
+          <div class="col-3"><button id="filterBtn">Lọc</button></div>
+          <div class="col-3"><button id="exportBtn">Xuất Excel</button></div>
+        </div>
+
+        <div style="margin-top: 10px; max-height: 360px; overflow: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th><th>Thời gian quét</th><th>TikTok status</th><th>Mapped</th><th>Duplicate</th><th>Canceled</th><th>Picked</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
