@@ -1,0 +1,16 @@
+{
+  "name": "tiktok-warehouse-scan-system",
+  "version": "1.0.0",
+  "description": "Web system for scanning and monitoring TikTok Shop warehouse orders",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "check": "node --check server.js && node --check public/script.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
